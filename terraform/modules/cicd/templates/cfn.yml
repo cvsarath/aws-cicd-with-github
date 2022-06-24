@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  GlueIAMRoleName:
+    Type: String
+    Default: 'AWSGlueCustomServiceRole"'
+  JobName:
+    Type: String
+    Default: 'Dev-DAT-5678_deployment'
+  S3Path:
+    Type: String
+    Default: 'aws-glue-scripts'     
+    
+Resources:
+  CFNRGlueETL:
+    Type: AWS::Glue::Job   
+    Properties:
+      Role: !Ref GlueIAMRoleName
+      Description: Glue job 1
+      Command:   
+        Name: glueetl
+        ScriptLocation: "s3://dev-deployment-test1234/Dev-DAT-5678_deployment.py"
+      AllocatedCapacity: 10  
+      ExecutionProperty:   
+        MaxConcurrentRuns: 1        
+      Name: !Sub ${JobName}
+      DefaultArguments:
+        '--enable-glue-datacatalog': ''
+      GlueVersion: 2.0
